@@ -4,6 +4,7 @@ import Button from '@/components/Button'
 import { defaultPizzaImage } from '@/components/ProductListItem'
 import Colors from '@/constants/Colors'
 import * as ImagePicker from 'expo-image-picker';
+import { Stack } from 'expo-router'
 
 const CreateProductScreen = () => {
 
@@ -47,9 +48,9 @@ const onCreate = () => {
 const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
         // mediaTypes: ['images', 'videos'],
-      allowsEditing: true,
+      allowsEditing: true, // with false avoid to see crop options
       aspect: [4, 3],
       quality: 1,
     });
@@ -63,7 +64,9 @@ const pickImage = async () => {
 
   return (
     <View style={styles.container}>
-    <Image source={{uri: defaultPizzaImage}} style={styles.image} />
+        <Stack.Screen options={{ title: 'Create Product' }}/>
+    <Image source={{uri: image || defaultPizzaImage}} 
+    style={styles.image} />
     <Text onPress={pickImage} style={styles.textButton}>Select Image</Text>
       <Text style={styles.label}>Name</Text>
       <TextInput 
