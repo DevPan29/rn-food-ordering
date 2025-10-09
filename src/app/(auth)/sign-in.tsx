@@ -3,10 +3,23 @@ import React, { useState } from 'react';
 import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import { Link, Stack } from 'expo-router';
+import { supabase } from '@/lib/supabase';
+import { Alert } from 'react-native';
 
 const SignInScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  
+    async function signInWithEmail() {
+      setLoading(true);
+      console.log('Sign in with email:', email);
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) Alert.alert('Error signing in:', error.message);
+      const session = await supabase.auth.getSession(); // o quello che usi per ottenere la session
+      console.log('session size (bytes):', JSON.stringify(session).length);
+      setLoading(false);
+    } 
 
   return (
     <View style={styles.container}>
@@ -29,7 +42,7 @@ const SignInScreen = () => {
         secureTextEntry
       />
 
-      <Button text="Sign in" />
+      <Button onPress={signInWithEmail} text={loading ? "Sign in ..." : "Sign In"} />
       <Link href="/sign-up" style={styles.textButton}>
         Create an account
       </Link>
