@@ -40,4 +40,4 @@ export default function AuthProvider({children}: PropsWithChildren) {
     )
 }
 
-export const uesAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);

@@ -2,11 +2,11 @@ import { View, Text, ActivityIndicator } from 'react-native';
 import React from 'react';
 import Button from '../components/Button';
 import { Link, Redirect } from 'expo-router';
-import { uesAuth } from '@/providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import { supabase } from '@/lib/supabase';
 
 const index = () => {
-  const { session, loading } = uesAuth();
+  const { session, loading } = useAuth();
   console.log(`session: ${JSON.stringify(session)}`);
   console.log(`loading: ${loading}`);
 

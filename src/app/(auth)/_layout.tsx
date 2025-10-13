@@ -1,8 +1,8 @@
-import { uesAuth } from '@/providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import {  Redirect, Stack } from 'expo-router';
 
 export default function AuthLayout() {
-  const { session } = uesAuth();
+  const { session } = useAuth();
 
   // Auth Guard
   if (session) {
