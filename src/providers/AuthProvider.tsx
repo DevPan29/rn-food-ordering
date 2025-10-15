@@ -16,14 +16,13 @@ export default function AuthProvider({children}: PropsWithChildren) {
     
     const [session, setSession] = useState<Session | null>(null);
     const [loading, setLoading] = useState(true);
+    console.log(`AuthProvider session: ${JSON.stringify(session?.user?.email)}`);
 
     useEffect(() => {
         // check auth state
-        // console.log('AuthProvider mounted');
         // fetch user session from supabase
         const fetchSession = async () => {
             const { data } = await supabase.auth.getSession()
-           // console.log('AuthProvider session:', data.session);
             setSession(data.session);
             setLoading(false);
         };

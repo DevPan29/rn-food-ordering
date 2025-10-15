@@ -50,24 +50,24 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AuthProvider>
-      <CartProvider>
-        <Stack screenOptions={{
-            title: 'Food Ordering App',
-            headerTitleAlign: 'center',
-            headerStyle: {
-              backgroundColor: '#f4f4f4',
-            },
-            headerTitleStyle: {
-              fontWeight: 'bold',
-              fontSize: 18,
-            },
-          }}>
-          <Stack.Screen name="(admin)" options={{ headerShown: false }} />
-          <Stack.Screen name="(user)" options={{ headerShown: false }} />
-          <Stack.Screen name="cart" options={{ presentation: 'modal' }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        </Stack>
-      </CartProvider>
+        <CartProvider>
+          <Stack screenOptions={{
+              title: 'Food Ordering App',
+              headerTitleAlign: 'center',
+              headerStyle: {
+                backgroundColor: '#f4f4f4',
+              },
+              headerTitleStyle: {
+                fontWeight: 'bold',
+                fontSize: 18,
+              },
+            }}>
+            <Stack.Screen name="(admin)" options={{ headerShown: false }} />
+            <Stack.Screen name="(user)" options={{ headerShown: false }} />
+            <Stack.Screen name="cart" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          </Stack>
+        </CartProvider>
       </AuthProvider>
     </ThemeProvider>
   );
