@@ -3,10 +3,13 @@ import products from '@assets/data/products';
 import ProductListItem from '@components/ProductListItem';
 import { useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useQuery } from '@tanstack/react-query';
 
 export default function MenuScreen() {
 
-  useEffect(() => {
+  const {} = useQuery();
+
+  /* useEffect(() => {
     console.log('MenuScreen index.tsx rendered');
     const fetchProducts = async () => {
       const {data, error} = await supabase.from('products').select('*');
@@ -14,7 +17,7 @@ export default function MenuScreen() {
       console.log('Fetching products data: ', data);
     } 
     fetchProducts();
-  }, [])
+  }, []) */
 
 
   return (

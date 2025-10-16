@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 import CartProvider from '../providers/CartProvider';
 import AuthProvider from '../providers/AuthProvider';
+import QueryProvider from '../providers/QueryProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -50,6 +51,7 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AuthProvider>
+        <QueryProvider>
         <CartProvider>
           <Stack screenOptions={{
               title: 'Food Ordering App',
@@ -68,6 +70,7 @@ function RootLayoutNav() {
             <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           </Stack>
         </CartProvider>
+        </QueryProvider>
       </AuthProvider>
     </ThemeProvider>
   );
