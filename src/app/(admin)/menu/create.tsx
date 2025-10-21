@@ -5,7 +5,7 @@ import { defaultPizzaImage } from '@/components/ProductListItem'
 import Colors from '@/constants/Colors'
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
-import { useInsertProduct, useProduct, useUpdateProduct } from '@/api/products'
+import { useDeleteProduct, useInsertProduct, useProduct, useUpdateProduct } from '@/api/products'
 
 const CreateProductScreen = () => {
 
@@ -20,17 +20,37 @@ const CreateProductScreen = () => {
 
     const { mutate: insertProduct } = useInsertProduct();
     const { mutate: updateProduct } = useUpdateProduct();
-    const { data: updatingProduct } = useProduct(id)
+    
+    const { mutate: deleteProduct } = useDeleteProduct();
 
     const router = useRouter();
 
+    // usa anche isLoading e isError da react-query
+    const { data: updatingProduct, isLoading: isProductLoading, isError: isProductError } = useProduct(id);
+
+    // useEffect: assegna campi SOLO se updatingProduct è un oggetto valido
     useEffect(() => {
-        if (updatingProduct) {
-            setName(updatingProduct.name);
-            setPrice(updatingProduct.price.toString());
-            setImage(updatingProduct.image);
-        }
-    }, [updatingProduct])
+    if (!isUpdating) return; // se non stiamo aggiornando non facciamo nulla
+    if (isProductLoading) return; // ancora in caricamento
+    if (isProductError) return;   // opzionale: puoi mostrare errore
+
+    if (updatingProduct) {
+        setName(updatingProduct.name ?? '');
+        setPrice(
+        updatingProduct.price !== undefined && updatingProduct.price !== null
+            ? String(updatingProduct.price)
+            : ''
+        );
+        setImage(updatingProduct.image ?? null);
+    } else {
+        // prodotto non trovato (forse è stato cancellato)
+        setName('');
+        setPrice('');
+        setImage(null);
+    }
+    }, [isUpdating, isProductLoading, isProductError, updatingProduct]);
+
+
 
 
     const resetFields = () => {
@@ -108,7 +128,12 @@ const pickImage = async () => {
   };
 
   const onDelete = () => {
-    console.warn("DELETE !!!!!!!!!")
+   deleteProduct(id, {
+        onSuccess: () => {
+            resetFields();
+            router.replace('/(admin)');
+        }
+    })
   }
 
   const confirmDelete = () => {

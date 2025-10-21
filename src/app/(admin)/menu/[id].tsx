@@ -23,8 +23,6 @@ const ProductDetailsScreen = () => {
 
   const [selectedSize, setSelectedSize] = useState<PizzaSize>('M');
 
-  // const product = products.find(p => p.id.toString() === id);
-
   const addToCart = () => {
     if (!product) return
     addItem(product!, selectedSize as any);
@@ -37,6 +35,16 @@ const ProductDetailsScreen = () => {
 
   if (error) {
     return <View><Text>Error loading product</Text></View>;
+  }
+
+   // <-- important: handle caso prodotto non trovato (null)
+  if (!product) {
+    return (
+      <View style={styles.center}>
+        <Text style={{ marginBottom: 12 }}>Product not found (it may have been deleted).</Text>
+        <Button text="Back" onPress={() => router.back()} />
+      </View>
+    );
   }
 
   return (
@@ -76,6 +84,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
     padding: 10
+  },
+  center: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16
   },
   title: {
     fontSize: 20,

@@ -7,11 +7,20 @@ import { Link, useSegments } from 'expo-router';
 export const defaultPizzaImage = 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png'
 
 type ProductListItemProps = {
-  product: Product;
+  product: Product | null;
 }
 
 const ProductListItem = ({ product }: ProductListItemProps) => {
   const segments = useSegments();
+
+  if (!product) {
+    return (
+      <View style={[styles.container, { alignItems: 'center' }]}>
+        <Text style={{ color: 'gray' }}>Product not available</Text>
+      </View>
+    );
+  }
+
   return (
     <Link href={`/${segments[0]}/menu/${product.id}`} asChild>
       <Pressable style={styles.container}>

@@ -15,23 +15,25 @@ export const useProductList = () => {
       });
 }
 
-export const useProduct = (id: number) => {
-    return useQuery({
-        queryKey: ['products', id],
-        queryFn: async () => {
-          const {data, error} = await supabase
-          .from('products')
-          .select('*')
-          .eq('id', id)
-          .single();
-          if (error) {
-            console.log('Error fetching products: ', error);
-            throw new Error('Error fetching products');
-          }
-          return data;
-        }
-      });
+export const useProduct = (id?: number) => {
+  return useQuery({
+    queryKey: ['products', id],
+    enabled: typeof id === 'number' && !Number.isNaN(id),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle(); // torna null se non esiste
+      if (error) {
+        console.log('Error fetching product: ', error);
+        throw new Error('Error fetching product');
+      }
+      return data; // può essere null
+    }
+  });
 }
+
 
 export const useInsertProduct = () => {
   const queryClient = useQueryClient();
@@ -83,4 +85,28 @@ export const useUpdateProduct = () => {
     }
   })
 
+}
+
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    async mutationFn(id: number) {
+      
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', id);
+      if (error) {
+          console.log('Error deleting a product: ', error);
+          throw new Error('Error deleting a product');
+        }
+    }, async onSuccess(_, id) {
+      await queryClient.invalidateQueries({ queryKey: ['products'] });
+      console.log(`Deleted product with id: ${id}`);
+      if (id) {
+       await queryClient.invalidateQueries({ queryKey: ['products', id] }); 
+      }
+    }
+  })
 }
