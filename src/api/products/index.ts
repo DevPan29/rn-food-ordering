@@ -15,10 +15,10 @@ export const useProductList = () => {
       });
 }
 
-export const useProduct = (id?: number) => {
+export const useProduct = (id: number) => {
   return useQuery({
     queryKey: ['products', id],
-    enabled: typeof id === 'number' && !Number.isNaN(id),
+    enabled: typeof id === 'number' && !Number.isNaN(id), //ikmportant to avoid the call if id is null
     queryFn: async () => {
       const { data, error } = await supabase
         .from('products')

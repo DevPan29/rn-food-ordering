@@ -2,6 +2,8 @@ import { CartItem, Product } from "@/types";
 import { createContext, useContext, useState } from "react";
 import { randomUUID } from "expo-crypto";
 
+
+
 type CartType = {
     items: CartItem[],
     addItem: (product: Product, size: CartItem['size']) => void,
@@ -17,6 +19,7 @@ const CartContext = createContext<CartType>({
 });
 
 import { PropsWithChildren } from "react";
+import { Tables } from "@/database.types";
 
 const CartProvider = ({ children }: PropsWithChildren) => {
 
