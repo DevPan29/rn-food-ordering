@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 
-export const useOrderList = () => {
+export const useAdminOrderList = () => {
      return useQuery({
         queryKey: ['orders'],
         queryFn: async () => {

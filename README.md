@@ -41,4 +41,9 @@ To run the project locally, follow these steps:
 - Expo CLI installed globally (`npm install -g expo-cli`)
 - Android Studio (for Android) or Xcode (for iOS)
 
----
+## Auto Generation Typescript types
+
+in order to generate typescript types from the supabase DB execute the following commands:
+
+   - npx supabase login
+   - npx supabase gen types typescript --project-id jfbjrrsrlhrcryrfsdnw > src/database.types.ts
