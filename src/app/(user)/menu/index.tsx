@@ -1,6 +1,7 @@
 import { View, FlatList, ActivityIndicator, Text } from 'react-native';
 import ProductListItem from '@components/ProductListItem';
 import { useProductList } from '@/api/products';
+import OnlyForTestSignOutButton from '@/components/OnlyForTestSignOutButton';
 
 export default function MenuScreen() {
 
@@ -16,6 +17,7 @@ export default function MenuScreen() {
 
   return (
   <View>
+    {/* <OnlyForTestSignOutButton /> */}
       <FlatList 
         data={products}
         renderItem={({ item }) => <ProductListItem product={item} />}
