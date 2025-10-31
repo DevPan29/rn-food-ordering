@@ -8,22 +8,28 @@ type CartType = {
     items: CartItem[],
     addItem: (product: Product, size: CartItem['size']) => void,
     updateQuantity: (itemId: string, amount: -1 | 1) => void,
-    total: number
+    total: number,
+    checkout: () => void
 }
 
 const CartContext = createContext<CartType>({
     items: [],
     addItem: () => {},
     updateQuantity: () => {},
-    total: 0
+    total: 0,
+    checkout: () => {}
 });
 
 import { PropsWithChildren } from "react";
-import { Tables } from "@/database.types";
+import { useInsertOrder } from "@/api/orders";
+import { useRouter } from "expo-router";
 
 const CartProvider = ({ children }: PropsWithChildren) => {
 
     const [items, setItems] = useState<CartItem[]>([]);
+
+    const {mutate: insertOrder} = useInsertOrder();
+    const router = useRouter();
 
     const addItem = (product: Product, size: CartItem['size']) => {
 
@@ -55,12 +61,27 @@ const CartProvider = ({ children }: PropsWithChildren) => {
 
     const total = items.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
 
+    const clearCart = () => {
+        setItems([]);
+    }
+
+    const checkout = () => {
+        console.warn('Checkout');
+        insertOrder({ total }, {
+            onSuccess: (data) => {
+                clearCart();
+                router.push(`/(user)/orders/${data.id}`);
+            }
+        })
+    }
+
     return <CartContext.Provider 
     value={{
         items,
         addItem,
         updateQuantity,
-        total
+        total,
+        checkout
     }}
     >
         {children}
