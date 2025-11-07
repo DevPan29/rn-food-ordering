@@ -4,13 +4,18 @@ import OrderItemListItem from '../../../components/OrderItemListItem';
 import OrderListItem from '../../../components/OrderListItem';
 import Colors from '@/constants/Colors';
 import { OrderStatusList } from '@/types';
-import { useOrderDetails } from '@/api/orders';
+import { useOrderDetails, useUpdateOrder } from '@/api/orders';
 
 const OrderDetailScreen = () => {
   const { id: idString } = useLocalSearchParams(); // useLoadlSearchParams can return a single value or an array
-    const id = parseFloat(typeof idString === 'string' ? idString : idString?.[0]);
+  const id = parseFloat(typeof idString === 'string' ? idString : idString?.[0]);
 
   const {data: order, isLoading, error} = useOrderDetails(id);
+  const {mutate: updateOrder} = useUpdateOrder()
+
+  const updateStatus = (status: string) => {
+    updateOrder({id: id, updatedFields: {status}});
+  }
 
   if (isLoading) {
     return <ActivityIndicator />;
@@ -23,6 +28,7 @@ const OrderDetailScreen = () => {
   if (!order){
     return <Text>Order not found</Text>
   }
+  
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: `Order #${order.id}` }} />
@@ -40,7 +46,7 @@ const OrderDetailScreen = () => {
     {OrderStatusList.map((status) => (
       <Pressable
         key={status}
-        onPress={() => console.warn('Update status')}
+        onPress={() => updateStatus(status)}
         style={{
           borderColor: Colors.light.tint,
           borderWidth: 1,

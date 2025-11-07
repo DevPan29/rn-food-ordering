@@ -21,7 +21,7 @@ const OrderDetailScreen = () => {
     if (!order){
       return <Text>Order not found</Text>
     }
-
+// console.log(JSON.stringify(order))
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: `Order #${order.id}` }} />

@@ -6,10 +6,16 @@ export type Enums<T extends keyof Database['public']['Enums']> =
   Database['public']['Enums'][T];
 export type InsertTables<T extends keyof Database['public']['Tables']> =
   Database['public']['Tables'][T]['Insert'];
+export type UpdateTables<T extends keyof Database['public']['Tables']> =
+  Database['public']['Tables'][T]['Update'];
+  
 
 
 export type Product = Tables<'products'>;
 export type Order = Tables<'orders'>;
+export type InsertOrder = InsertTables<'orders'>;
+export type UpdateOrder = UpdateTables<'orders'>;
+export type OrderItem = Tables<'order_items'>;
 
 /* export type Product = {
   id: number;
@@ -47,14 +53,14 @@ export type OrderStatus = 'New' | 'Cooking' | 'Delivering' | 'Delivered';
   order_items?: OrderItem[];
 }; */
 
-export type OrderItem = {
+/* export type OrderItem = {
   id: number;
   product_id: number;
   products: Product;
   order_id: number;
   size: PizzaSize;
   quantity: number;
-};
+}; */
 
 export type Profile = {
   id: string;
