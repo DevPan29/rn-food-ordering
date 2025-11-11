@@ -26,7 +26,7 @@ export default function AuthProvider({children}: PropsWithChildren) {
     const [session, setSession] = useState<Session | null>(null);
     const [profile, setProfile] = useState<Profile | null>(null);
     const [loading, setLoading] = useState(true);
-    console.log(`AuthProvider session: ${JSON.stringify(session?.user?.email)}`);
+    console.log(`AuthProvider session: ${JSON.stringify(session?.user?.id)} - ${JSON.stringify(session?.user?.email)}`);
 
     useEffect(() => {
         // check auth state
