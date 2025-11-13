@@ -6,6 +6,11 @@ import Colors from '@/constants/Colors'
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useDeleteProduct, useInsertProduct, useProduct, useUpdateProduct } from '@/api/products'
+import * as FileSystem from 'expo-file-system';
+import { randomUUID } from 'expo-crypto'
+import { supabase } from '@/lib/supabase'
+import { decode } from 'base64-arraybuffer'
+import { Product } from '@/types'
 
 const CreateProductScreen = () => {
 
@@ -83,13 +88,17 @@ const CreateProductScreen = () => {
     }   
 }
 
-const onCreate = () => {
+const onCreate = async () => {
     if (!validateInput()) {
         return;
     }
-    insertProduct({
-        name, price: parseFloat(price), image
-    }, {
+
+    const imagePath = await uploadImage();
+    const newProduct: Omit<Product, 'id' | 'created_at'> = { name, price: parseFloat(price), image: '' };
+    if (imagePath) {
+        newProduct.image = imagePath;
+    }
+    insertProduct(newProduct, {
         onSuccess: () => {
             resetFields();
             router.back();
@@ -145,6 +154,28 @@ const pickImage = async () => {
         },
     ])
   }
+
+  const uploadImage = async () => {
+  if (!image?.startsWith('file://')) {
+    return;
+  }
+
+  const base64 = await FileSystem.readAsStringAsync(image, {
+    encoding: 'base64',
+  });
+  const filePath = `${randomUUID()}.png`;
+  const contentType = 'image/png';
+
+  const { data, error } = await supabase.storage
+    .from('product-images')
+    .upload(filePath, decode(base64), { contentType });
+
+    console.log('uploadImage error: ', error)
+
+  if (data) {
+    return data.path;
+  }
+};
 
   return (
     <View style={styles.container}>
